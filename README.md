@@ -108,10 +108,10 @@ Utilize a extensão Live Server do VS Code para rodar o projeto localmente.
 <table align="center">
 <tr>
   <td align="center"><a href="https://github.com/caua-braga-de-lima"><img src="assets/equipe/caua.jpeg" width="70%;" alt="Cauã Braga"/><br /><sub><b>Cauã Braga</b></sub></a><br/></td>
-  <td align="center"><a href=""><img src="assets/equipe/geo.jpg" width="70%;" alt="Geovana Rodrigues"/><br /><sub><b>Geovana Rodrigues</b></sub></a><br/></td>
+  <td align="center"><a href="https://github.com/Geovanarsouza"><img src="assets/equipe/geo.jpg" width="70%;" alt="Geovana Rodrigues"/><br /><sub><b>Geovana Rodrigues</b></sub></a><br/></td>
   <td align="center"><a href="https://github.com/prsousa8"><img src="assets/equipe/paulo.jpeg" width="70%;" alt="Paulo Ricardo"/><br /><sub><b>Paulo Ricardo</b></sub></a><br/></td>
   <td align="center"><a href="https://github.com/Raquel-Luis-Duarte"><img src="assets/equipe/raquel.jpeg" width="70%;" alt="Raquel Duarte"/><br /><sub><b>Raquel Duarte</b></sub></a><br/></td>
-  <td align="center"><a href="https://github.com/Samuel-C-C"><img src="assets/equipe/" width="70%;" alt="Samuel Camilo"/><br /><sub><b>Samuel Camilo</b></sub></a><br/></td>
-  <td align="center"><a href=""><img src="assets/equipe/yasmin.jpeg" width="70%;" alt="Yasmin Emily"/><br /><sub><b>Yasmin Emily</b></sub></a><br/></td>
+  <td align="center"><a href="https://github.com/Samuel-C-C"><img src="assets/equipe/samuel.jpeg" width="70%;" alt="Samuel Camilo"/><br /><sub><b>Samuel Camilo</b></sub></a><br/></td>
+  <td align="center"><a href="https://github.com/YasminEmily"><img src="assets/equipe/yasmin.jpeg" width="70%;" alt="Yasmin Emily"/><br /><sub><b>Yasmin Emily</b></sub></a><br/></td>
 </tr>
 </table>
