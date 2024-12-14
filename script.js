@@ -1,5 +1,8 @@
 import * as THREE from './libraries/three.module.js';
 import { OrbitControls } from './libraries/OrbitControls.js';
+import { createDepressedGrid } from './grid.js';
+import { createAsteroids, toggleAsteroids } from './asteroids.js';
+import { createConstellations, toggleConstellations } from './constellations.js';
 
 // Configuração inicial: Cena, Câmera e Renderizador
 const scene = new THREE.Scene();
@@ -13,8 +16,9 @@ const textureLoader = new THREE.TextureLoader();
 
 
 // Fundo da Cena
-const spaceTexture = textureLoader.load('assets/textures/stars.jpg');
-scene.background = spaceTexture;
+const spaceTexture1 = new THREE.TextureLoader().load('assets/textures/stars.jpg');
+const spaceTexture2 = new THREE.TextureLoader().load('assets/textures/mercury.jpg');
+scene.background = spaceTexture1;
 
 // Luzes
 const pointLight = new THREE.PointLight(0xffffff, 2);
@@ -24,11 +28,12 @@ scene.add(pointLight);
 const ambientLight = new THREE.AmbientLight(0x404040, 0.5); // Luz ambiente suave
 scene.add(ambientLight);
 
+
 // Cria o Sol
 const sunGeometry = new THREE.SphereGeometry(5,32,32);
 const sunMaterial = new THREE.MeshStandardMaterial({
     emissive: 0xffff00, // Cor emissiva (brilho)
-    emissiveIntensity: 1, // Intensidade do brilho
+    emissiveIntensity: 2, // Intensidade do brilho
     emissiveMap: textureLoader.load('assets/textures/sun.jpg') // Textura para controlar a emissão
 });
 
@@ -97,7 +102,6 @@ planets[5].planet.add(ring);
 const controls = new OrbitControls(camera, renderer.domElement);
 camera.position.z = 100;
 controls.update();
-
 
 // Estados
 let speedMultiplier = 1;
@@ -190,6 +194,19 @@ window.addEventListener('keydown', (event) => {
     }
 });
 
+// Cria asteroides
+createAsteroids(scene);
+
+// Cria constelações
+createConstellations(scene);
+
+// Criar a grade de depressão
+let depressedGrid = createDepressedGrid(200, 50, 50, 0x00ff00); // Parâmetros ajustáveis
+
+// Variável para verificar se a grade está visível
+let gridVisible = true;
+scene.add(depressedGrid);
+
 // Animação
 function animate() {
     requestAnimationFrame(animate);
@@ -204,3 +221,30 @@ function animate() {
 
 
 animate();
+
+// Evento de clique no botão para ativar/desativar asteroides e constelações
+document.getElementById('toggleButton').addEventListener('click', () => {
+    toggleAsteroids();
+    toggleConstellations();
+});
+
+// Adicionar evento para alternar a visibilidade da grade
+const toggleButton = document.getElementById('toggleButtonGrid');
+toggleButton.addEventListener('click', () => {
+    if (gridVisible) {
+        scene.remove(depressedGrid); // Remove a grade da cena
+    } else {
+        scene.add(depressedGrid); // Adiciona a grade à cena
+    }
+    gridVisible = !gridVisible; // Alterna o estado
+});
+
+// Alternar a textura do plano de fundo
+const toggleBackgroundButton = document.getElementById('toggleBackground');
+toggleBackgroundButton.addEventListener('click', () => {
+    if (scene.background === spaceTexture1) {
+        scene.background = spaceTexture2; // Altera para a segunda textura
+    } else {
+        scene.background = spaceTexture1; // Volta para a primeira textura
+    }
+});

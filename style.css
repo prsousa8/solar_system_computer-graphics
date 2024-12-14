@@ -1,4 +1,26 @@
-html,body{
+body{
     margin: 0;
     padding: 0;
+    overflow: hidden;
+}
+
+#toggleButton, #toggleButtonGrid , #toggleBackground {
+    position: absolute;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #00f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    left: 20px;
+}
+
+#toggleButton{
+    top: 50px;
+}
+#toggleBackground {
+    top: 100px;
+}
+#toggleButtonGrid{
+    top: 150px;
 }
