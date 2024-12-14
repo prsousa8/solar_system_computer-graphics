@@ -245,6 +245,42 @@ function moveSolarSystem() {
     }
 }
 
+// Array para armazenar as órbitas
+const orbits = [];
+
+// Função para criar uma órbita
+function createOrbit(radius, color = 0xffffff) {
+    const orbitGeometry = new THREE.BufferGeometry();
+    const points = [];
+
+    // Gera os pontos do círculo
+    for (let i = 0; i <= 64; i++) {
+        const angle = (i / 64) * Math.PI * 2;
+        points.push(radius * Math.cos(angle), 0, radius * Math.sin(angle)); // (x, y, z)
+    }
+
+    // Adiciona os pontos à geometria
+    orbitGeometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
+
+    // Material da linha
+    const orbitMaterial = new THREE.LineBasicMaterial({ color });
+
+    // Cria e retorna a linha
+    return new THREE.Line(orbitGeometry, orbitMaterial);
+}
+
+// Cria as órbitas (inicialmente ocultas)
+planets.forEach((planet, index) => {
+    const orbit = createOrbit(planet.distance, 0x888888);
+    orbit.visible = false; // Começa oculto
+    scene.add(orbit);
+    orbits.push(orbit); // Armazena no array para controle
+});
+
+// Função para alternar a visibilidade das órbitas
+const toggleOrbitButton = document.getElementById('toggleOrbitButton');
+let orbitsVisible = false;
+
 
 // Animação
 function animate() {
@@ -300,4 +336,10 @@ audioToggle.addEventListener('click', () => {
         audioToggle.style.backgroundImage = "url('assets/icons/volume_up.svg')"; // Atualiza para ícone de som ligado
     }
     isAudioPlaying = !isAudioPlaying; // Alterna o estado do áudio
+});
+
+toggleOrbitButton.addEventListener('click', () => {
+    orbitsVisible = !orbitsVisible; // Alterna o estado
+    orbits.forEach(orbit => (orbit.visible = orbitsVisible)); // Alterna a visibilidade de todas as órbitas
+    toggleOrbitButton.textContent = orbitsVisible ? 'Hide Orbits' : 'Show Orbits'; // Atualiza o texto do botão
 });
