@@ -207,6 +207,14 @@ let depressedGrid = createDepressedGrid(200, 50, 50, 0x00ff00); // Parâmetros a
 let gridVisible = true;
 scene.add(depressedGrid);
 
+// Lógica de áudio
+const audio = new Audio('assets/audio/audio.mp3'); // Substitua pelo caminho correto do seu áudio
+audio.loop = true; // O áudio irá repetir continuamente
+
+// Botão para ativar/desativar áudio
+const audioToggle = document.getElementById('audioToggle');
+let isAudioPlaying = false; // Estado inicial do áudio
+
 // Animação
 function animate() {
     requestAnimationFrame(animate);
@@ -247,4 +255,16 @@ toggleBackgroundButton.addEventListener('click', () => {
     } else {
         scene.background = spaceTexture1; // Volta para a primeira textura
     }
+});
+
+// Ativar e desativar audio
+audioToggle.addEventListener('click', () => {
+    if (isAudioPlaying) {
+        audio.pause();
+        audioToggle.style.backgroundImage = "url('assets/icons/volume_off.svg')"; // Atualiza para ícone de som desligado
+    } else {
+        audio.play();
+        audioToggle.style.backgroundImage = "url('assets/icons/volume_up.svg')"; // Atualiza para ícone de som ligado
+    }
+    isAudioPlaying = !isAudioPlaying; // Alterna o estado do áudio
 });
