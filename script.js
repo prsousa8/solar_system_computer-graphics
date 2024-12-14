@@ -1,8 +1,8 @@
 import * as THREE from './libraries/three.module.js';
 import { OrbitControls } from './libraries/OrbitControls.js';
-import { createDepressedGrid } from './grid.js';
-import { createAsteroids, toggleAsteroids } from './asteroids.js';
-import { createConstellations, toggleConstellations } from './constellations.js';
+import { createDepressedGrid } from './js/grid.js';
+import { createAsteroids, toggleAsteroids } from './js/asteroids.js';
+import { createConstellations, toggleConstellations } from './js/constellations.js';
 
 // Configuração inicial: Cena, Câmera e Renderizador
 const scene = new THREE.Scene();

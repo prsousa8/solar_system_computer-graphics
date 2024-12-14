@@ -1,4 +1,4 @@
-import * as THREE from './libraries/three.module.js';
+import * as THREE from '../libraries/three.module.js';
 
 export function createDepressedGrid(size = 200, divisions = 50, depthFactor = 50, color = 0x00ff00) {
     // PlaneGeometry com número de divisões ajustado

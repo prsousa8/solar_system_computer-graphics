@@ -1,4 +1,4 @@
-import * as THREE from './libraries/three.module.js';
+import * as THREE from '../libraries/three.module.js';
 
 // Variáveis globais para armazenar constelações e linhas
 let constellations = [];
