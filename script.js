@@ -215,14 +215,47 @@ audio.loop = true; // O áudio irá repetir continuamente
 const audioToggle = document.getElementById('audioToggle');
 let isAudioPlaying = false; // Estado inicial do áudio
 
+// Variável para controlar o estado do movimento do sistema solar
+let isSystemMoving = false; // Inicialmente parado
+let systemDirection = 1; // Define direção inicial (1 = direita, -1 = esquerda)
+
+// Crie um grupo para o sistema solar (agrupa planetas e o sol)
+const solarSystem = new THREE.Group();
+scene.add(solarSystem);
+
+// Adiciona o Sol e planetas ao grupo do sistema solar
+solarSystem.add(sun);
+planets.forEach(({ orbit }) => solarSystem.add(orbit));
+
+// Botão para alternar o movimento do sistema solar
+const moveSystemButton = document.getElementById('moveSystem');
+moveSystemButton.addEventListener('click', () => {
+    isSystemMoving = !isSystemMoving; // Alterna o estado de movimento
+    moveSystemButton.textContent = isSystemMoving ? 'Stop System' : 'Move System';
+});
+
+// Lógica para deslocar o sistema solar
+function moveSolarSystem() {
+    if (isSystemMoving) {
+        solarSystem.position.x += 0.05 * systemDirection; // Move em X
+        // Altera a direção se atingir uma "parede" imaginária
+        if (solarSystem.position.x > 50 || solarSystem.position.x < -50) {
+            systemDirection *= -1; // Inverte a direção
+        }
+    }
+}
+
+
 // Animação
 function animate() {
     requestAnimationFrame(animate);
 
-    planets.forEach(({ planet, orbit, speed, distance }) => {
+    planets.forEach(({ planet, orbit, speed }) => {
         orbit.rotation.y += speed * speedMultiplier; // Translação
         planet.rotation.y += 0.02; // Rotação
     });
+
+    moveSolarSystem(); // Adiciona o deslocamento do sistema solar
 
     renderer.render(scene, camera);
 }
