@@ -281,23 +281,86 @@ planets.forEach((planet, index) => {
 const toggleOrbitButton = document.getElementById('toggleOrbitButton');
 let orbitsVisible = false;
 
+// Salvar o estado inicial do sistema solar e da câmera
+const initialCameraPosition = camera.position.clone();
+const initialCameraTarget = controls.target.clone();
+const initialSolarSystemPosition = solarSystem.position.clone();
+let isBackground1 = true; // Estado inicial do plano de fundo
+scene.background = spaceTexture1; // Define o fundo inicial
 
-// Animação
+// Função para resetar o estado
+function resetScene() {
+    // Resetar a posição da câmera
+    camera.position.copy(initialCameraPosition);
+    controls.target.copy(initialCameraTarget);
+    controls.update();
+
+    // Resetar a posição do sistema solar
+    solarSystem.position.copy(initialSolarSystemPosition);
+
+    // Resetar as rotações dos planetas e órbitas
+    planets.forEach(({ planet, orbit }) => {
+        orbit.rotation.set(0, 0, 0);
+        planet.rotation.set(0, 0, 0);
+    });
+
+    // Resetar o plano de fundo
+    scene.background = spaceTexture1;
+    isBackground1 = true;
+
+    // Resetar estados
+    speedMultiplier = 1;
+    isAudioPlaying = false;
+    isSystemMoving = false;
+    audio.pause();
+    audio.currentTime = 0; // Reinicia o áudio
+
+    // Atualizar textos e ícones de botões
+    audioToggle.style.backgroundImage = "url('assets/icons/volume_off.svg')";
+    moveSystemButton.textContent = 'Move System';
+    toggleOrbitButton.textContent = 'Show Orbits';
+
+    // Resetar órbitas e grade, se necessário
+    orbits.forEach(orbit => (orbit.visible = false));
+    gridVisible = true;
+    scene.add(depressedGrid);
+}
+
+// Evento para o botão de reset
+const resetButton = document.getElementById('resetButton');
+resetButton.addEventListener('click', resetScene);
+
+// Variável de controle para o movimento
+let isMoving = false; // Movimento desativo por padrão
+
+// Botão para alternar o movimento
+const toggleMovementButton = document.getElementById('toggleMovement');
+toggleMovementButton.addEventListener('click', () => {
+    isMoving = !isMoving; // Alterna o estado
+    toggleMovementButton.textContent = isMoving ? 'Pause Movement' : 'Resume Movement';
+});
+
+// Loop de animação
 function animate() {
     requestAnimationFrame(animate);
 
-    planets.forEach(({ planet, orbit, speed }) => {
-        orbit.rotation.y += speed * speedMultiplier; // Translação
-        planet.rotation.y += 0.02; // Rotação
-    });
+    // Controle de movimento dos planetas
+    if (isMoving) {
+        planets.forEach(({ planet, orbit, speed }) => {
+            orbit.rotation.y += speed * speedMultiplier; // Translação
+            planet.rotation.y += 0.02; // Rotação
+        });
+    }
 
-    moveSolarSystem(); // Adiciona o deslocamento do sistema solar
+    // Outros movimentos, se houver
+    moveSolarSystem(); // Exemplo de movimento do sistema solar
 
     renderer.render(scene, camera);
 }
 
-
+// Inicializa a animação
 animate();
+
 
 // Evento de clique no botão para ativar/desativar asteroides e constelações
 document.getElementById('toggleButton').addEventListener('click', () => {
