@@ -2,7 +2,6 @@ import * as THREE from '../libraries/three.module.js';
 
 // Função para criar N partículas distribuídas aleatoriamente entre um raio inferior e superior
 export function createRandomParticles(scene, numParticles, innerRadius, outerRadius) {
-    const textureLoader = new THREE.TextureLoader();
     const particles = [];
 
     // Loop para criar as partículas
