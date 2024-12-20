@@ -5,8 +5,6 @@ import { createDepressedGrid } from './js/grid.js';
 import { createAsteroids, toggleAsteroids } from './js/asteroids.js';
 import { createConstellations, toggleConstellations } from './js/constellations.js';
 import { createRandomParticles } from './js/stars.js';
-import './js/planets.js';
-import { alerta } from './js/planets.js';
 
 // Configuração inicial: Cena, Câmera e Renderizador
 const scene = new THREE.Scene();
