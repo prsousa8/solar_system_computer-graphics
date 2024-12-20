@@ -162,15 +162,15 @@ function createColoredRing(innerRadius, outerRadius, color) {
 // Adicionando múltiplos anéis ao redor de Saturno
 const rings = [
     createColoredRing(3.5, 4, 0x2E2A2A),  // Anel D (Preto com tom marrom escuro)
-createColoredRing(4, 4.5, 0x6E4B3A),  // Anel C (Marrom escuro)
-createColoredRing(4.5, 5, 0xA67C52),  // Anel B (Marrom médio)
-createColoredRing(5, 5.4, 0xD2B48C),  // Anel A (Bege / Marrom claro)
-createColoredRing(5.4, 5.8, 0x8B4513), // Anel F (Marrom escuro)
-createColoredRing(5.8, 6.2, 0x3E2723), // Anel G (Marrom muito escuro / quase preto)
-createColoredRing(6.2, 6.6, 0x1C1C1C), // Anel E (Preto)
-createColoredRing(6.6, 7, 0x4B2F2F),  // Anel extra 1 (Marrom escuro)
-createColoredRing(7, 7.4, 0x5D4037),  // Anel extra 2 (Marrom médio escuro)
-createColoredRing(7.4, 7.8, 0x3E2723), // Anel extra 3 (Marrom muito escuro / quase preto)
+    createColoredRing(4, 4.5, 0x6E4B3A),  // Anel C (Marrom escuro)
+    createColoredRing(4.5, 5, 0xA67C52),  // Anel B (Marrom médio)
+    createColoredRing(5, 5.4, 0xD2B48C),  // Anel A (Bege / Marrom claro)
+    createColoredRing(5.4, 5.8, 0x8B4513), // Anel F (Marrom escuro)
+    createColoredRing(5.8, 6.2, 0x3E2723), // Anel G (Marrom muito escuro / quase preto)
+    createColoredRing(6.2, 6.6, 0x1C1C1C), // Anel E (Preto)
+    createColoredRing(6.6, 7, 0x4B2F2F),  // Anel extra 1 (Marrom escuro)
+    createColoredRing(7, 7.4, 0x5D4037),  // Anel extra 2 (Marrom médio escuro)
+    createColoredRing(7.4, 7.8, 0x3E2723), // Anel extra 3 (Marrom muito escuro / quase preto)
 
 ];
 
@@ -474,13 +474,225 @@ function adicionarObjetoGLTF(url, posicao, escala, rotacao = { x: 0, y: 0, z: 0 
 // Exemplo de uso
 adicionarObjetoGLTF(
     './blackhole.glb',   // Caminho do arquivo GLTF
-    { x: 0, y: 100, z: 250 },         // Posição
+    { x: 0, y: 100, z: 500 },         // Posição
     { x: 100, y: 100, z: 100 },     // Escala
     { x: 2.5, y: 4.5, z: 2.5 }     // Rotação inicial (opcional)
 );
 
+// Esfera de particulas
+
+let ParticleSphere = false;
+let flowActive = false; // Adicionada para controle do fluxo
+let particleSphere = null; // Inicialização da variável
+let particleBeam = null; // Inicialização da variável
+
+function createDynamicParticleSphere(radius, color, particleCount) {
+    // Geometria para partículas
+    const particleGeometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const velocities = new Float32Array(particleCount * 3); // Velocidade de cada partícula
+
+    // Preenche as partículas com posições e velocidades iniciais
+    for (let i = 0; i < particleCount; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const r = radius + (Math.random() - 0.5) * 10;
+
+        const x = r * Math.sin(phi) * Math.cos(theta);
+        const y = r * Math.sin(phi) * Math.sin(theta);
+        const z = r * Math.cos(phi);
+
+        positions[i * 3] = x;
+        positions[i * 3 + 1] = y;
+        positions[i * 3 + 2] = z;
+
+        // Define uma velocidade aleatória
+        velocities[i * 3] = (Math.random() - 0.5) * 0.1;
+        velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.1;
+        velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.1;
+    }
+
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particleGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+
+    // Material das partículas
+    const particleMaterial = new THREE.PointsMaterial({
+        color: color,
+        size: 0.5,
+        transparent: true,
+        opacity: 0.8,
+    });
+
+    // Cria o objeto de partículas
+    particleSphere = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particleSphere);
+}
+
+// Função de animação para atualizar as partículas
+function animateParticles() {
+    if (!particleSphere) return;
+
+    const positions = particleSphere.geometry.attributes.position.array;
+    const velocities = particleSphere.geometry.attributes.velocity.array;
+
+    for (let i = 0; i < velocities.length / 3; i++) {
+        // Atualiza as posições com base nas velocidades
+        positions[i * 3] += velocities[i * 3];
+        positions[i * 3 + 1] += velocities[i * 3 + 1];
+        positions[i * 3 + 2] += velocities[i * 3 + 2];
+
+        // Simula uma "contenção" para manter as partículas próximas da esfera
+        const distance = Math.sqrt(
+            positions[i * 3] ** 2 +
+            positions[i * 3 + 1] ** 2 +
+            positions[i * 3 + 2] ** 2
+        );
+
+        if (distance > 110 || distance < 90) {
+            velocities[i * 3] *= -1;
+            velocities[i * 3 + 1] *= -1;
+            velocities[i * 3 + 2] *= -1;
+        }
+    }
+
+    particleSphere.geometry.attributes.position.needsUpdate = true; // Informa o Three.js sobre a mudança
+}
 
 
+
+// Função para criar um feixe de partículas com fonte de raio ajustável
+function createParticleBeam(start, direction, color, particleCount, beamRadius, sourceRadius) {
+    const particleGeometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const velocities = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = Math.random() * beamRadius;
+        const sourceOffset = Math.random() * sourceRadius;
+
+        const offsetX = radius * Math.cos(angle) + sourceOffset * (Math.random() - 0.5);
+        const offsetY = radius * Math.sin(angle) + sourceOffset * (Math.random() - 0.5);
+        const offsetZ = 0; // Fluxo unidimensional
+
+        positions[i * 3] = start.x + offsetX;
+        positions[i * 3 + 1] = start.y + offsetY;
+        positions[i * 3 + 2] = start.z + offsetZ;
+
+        velocities[i * 3] = direction.x + (Math.random() - 0.5) * 0.1;
+        velocities[i * 3 + 1] = direction.y + (Math.random() - 0.5) * 0.1;
+        velocities[i * 3 + 2] = direction.z + (Math.random() - 0.5) * 0.1;
+    }
+
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particleGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+
+    const material = new THREE.PointsMaterial({
+        color: color,
+        size: 0.5,
+        transparent: true,
+        opacity: 0.8,
+    });
+
+    particleBeam = new THREE.Points(particleGeometry, material);
+    scene.add(particleBeam);
+}
+
+// Função para animar o feixe de partículas
+function animateParticleBeam(radius) {
+    if (!particleBeam) return;
+
+    const positions = particleBeam.geometry.attributes.position.array;
+    const velocities = particleBeam.geometry.attributes.velocity.array;
+
+    for (let i = 0; i < velocities.length / 3; i++) {
+        positions[i * 3] += velocities[i * 3];
+        positions[i * 3 + 1] += velocities[i * 3 + 1];
+        positions[i * 3 + 2] += velocities[i * 3 + 2];
+
+        // Verifica colisão com a esfera de proteção
+        const distance = Math.sqrt(
+            positions[i * 3] ** 2 +
+            positions[i * 3 + 1] ** 2 +
+            positions[i * 3 + 2] ** 2
+        );
+
+        if (distance <= radius) {
+            // Desviar as partículas ao colidirem com a esfera
+            const normalX = positions[i * 3] / distance;
+            const normalY = positions[i * 3 + 1] / distance;
+            const normalZ = positions[i * 3 + 2] / distance;
+
+            velocities[i * 3] += normalX * 0.1;
+            velocities[i * 3 + 1] += normalY * 0.1;
+            velocities[i * 3 + 2] += normalZ * 0.1;
+        }
+
+        // Reinicia partículas fora do campo de visão
+        if (positions[i * 3] < -500 || positions[i * 3] > 500 ||
+            positions[i * 3 + 1] < -500 || positions[i * 3 + 1] > 500 ||
+            positions[i * 3 + 2] < -500 || positions[i * 3 + 2] > 500) {
+            positions[i * 3] = 300 + (Math.random() - 0.5) * 10;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+
+            velocities[i * 3] = -1 + (Math.random() - 0.5) * 0.1;
+            velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.1;
+            velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.1;
+        }
+    }
+
+    particleBeam.geometry.attributes.position.needsUpdate = true;
+}
+
+
+// Configuração do raio do feixe e da fonte
+const beamRadius = 500;  // Raio do feixe
+const sourceRadius = 300;  // Raio da fonte do feixe
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'j' || event.key === 'J') {
+        if (!ParticleSphere) { // Ativa a esfera se ainda não estiver ativa
+            ParticleSphere = true;
+            createDynamicParticleSphere(100, 0xffff00, 20000);
+        }
+    }
+
+    if (event.key === 'c' || event.key === 'C') {
+        if (!flowActive) { // Ativa o fluxo se ainda não estiver ativo
+            flowActive = true;
+            createParticleBeam(
+                new THREE.Vector3(300, 0, 0),
+                new THREE.Vector3(-1, 0, 0),
+                0xff0000,
+                10000,
+                beamRadius,
+                sourceRadius
+            );
+            animateParticleBeam(); // Inicia a animação do feixe
+        }
+    }
+
+    if (event.key === 'r' || event.key === 'R') {
+        // Reseta a esfera de proteção
+        if (particleSphere) {
+            scene.remove(particleSphere);
+            particleSphere.geometry.dispose(); // Libera memória
+            particleSphere.material.dispose(); // Libera memória
+            particleSphere = null; // Remove referência
+        }
+        ParticleSphere = false; // Atualiza o estado
+
+        // Reseta o feixe de partículas
+        if (particleBeam) {
+            scene.remove(particleBeam);
+            particleBeam.geometry.dispose(); // Libera memória
+            particleBeam.material.dispose(); // Libera memória
+            particleBeam = null; // Remove referência
+        }
+        flowActive = false; // Atualiza o estado
+    }
+});
 
 // Loop de animação
 function animate() {
@@ -497,6 +709,10 @@ function animate() {
 
     // Outros movimentos, se houver
     moveSolarSystem(); // Exemplo de movimento do sistema solar
+    // Atualiza a animação das partículas
+    animateParticles();
+    // Anima o feixe de partículas e verifica colisões
+    animateParticleBeam(100);
     renderer.render(scene, camera);
 }
 
