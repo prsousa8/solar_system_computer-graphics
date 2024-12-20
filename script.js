@@ -1,8 +1,11 @@
 import * as THREE from './libraries/three.module.js';
-import { OrbitControls } from './libraries/OrbitControls.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { createDepressedGrid } from './js/grid.js';
 import { createAsteroids, toggleAsteroids } from './js/asteroids.js';
 import { createConstellations, toggleConstellations } from './js/constellations.js';
+import "./js/stars.js";
+import { createRandomParticles } from './js/stars.js';
 
 // Configuração inicial: Cena, Câmera e Renderizador
 const scene = new THREE.Scene();
@@ -30,7 +33,7 @@ scene.add(ambientLight);
 
 
 // Cria o Sol
-const sunGeometry = new THREE.SphereGeometry(5,32,32);
+const sunGeometry = new THREE.SphereGeometry(5, 32, 32);
 const sunMaterial = new THREE.MeshStandardMaterial({
     emissive: 0xffff00, // Cor emissiva (brilho)
     emissiveIntensity: 2, // Intensidade do brilho
@@ -40,13 +43,66 @@ const sunMaterial = new THREE.MeshStandardMaterial({
 const sun = new THREE.Mesh(sunGeometry, sunMaterial);
 scene.add(sun);
 
+function createTail(planet, color, trailLength) {
+    const particleGeometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(trailLength * 3); // Cada partícula tem (x, y, z)
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    const particleMaterial = new THREE.PointsMaterial({
+        color,
+        size: 0.1, // Tamanho das partículas
+        transparent: true,
+        opacity: 0.8,
+    });
+
+    const particles = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particles);
+
+    return {
+        particles,
+        update: function () {
+            const positions = particles.geometry.attributes.position.array;
+
+            // Move as partículas existentes para trás no buffer
+            for (let i = positions.length - 3; i > 2; i--) {
+                positions[i] = positions[i - 3]; // Move x
+                positions[i + 1] = positions[i - 2]; // Move y
+                positions[i + 2] = positions[i - 1]; // Move z
+            }
+
+            // Atualiza a nova partícula com posição aleatória dentro do raio
+            const worldPosition = new THREE.Vector3();
+            planet.getWorldPosition(worldPosition);
+            const radiusTail = 1.5;
+            const angle = Math.random() * Math.PI * 2; // Ângulo aleatório em torno do planeta
+            const distance = Math.random() * radiusTail; // Distância aleatória até o raio máximo
+            const offsetX = Math.cos(angle) * distance;
+            const offsetY = (Math.random() - 0.5) * radiusTail * 0.5; // Aleatório em altura
+            const offsetZ = Math.sin(angle) * distance;
+
+            positions[0] = worldPosition.x + offsetX;
+            positions[1] = worldPosition.y + offsetY;
+            positions[2] = worldPosition.z + offsetZ;
+
+            particles.geometry.attributes.position.needsUpdate = true;
+        },
+    };
+}
+
+
+
 // Função para criar planetas com órbitas e texturas
-function createPlanet(size, texturePath, distance, speed,satellites = []) {
+function createPlanet(size, texturePath, distance, speed, satellites = [], radius, color) {
+    const orbitGroup = new THREE.Group(); // Grupo para a órbita
+    scene.add(orbitGroup);
+
+
     const planetGeometry = new THREE.SphereGeometry(size, 32, 32);
     const planetMaterial = new THREE.MeshStandardMaterial({
         map: textureLoader.load(texturePath)
     });
     const planet = new THREE.Mesh(planetGeometry, planetMaterial);
+    orbitGroup.add(planet);
 
     const orbit = new THREE.Object3D();
     orbit.add(planet);
@@ -68,7 +124,9 @@ function createPlanet(size, texturePath, distance, speed,satellites = []) {
         satelliteOrbit.userData = { speed, angle: 0 };
     });
 
-    return { planet, orbit, speed, angle: 0, distance };
+    const tail = createTail(planet, color, 200);
+
+    return { planet, orbit, speed, distance, tail };
 }
 
 // Adiciona os planetas
@@ -80,23 +138,46 @@ const planets = [
     ]),
     createPlanet(1.2, 'assets/textures/mars.jpg', 25, 0.008), // Marte
     createPlanet(3, 'assets/textures/jupiter.jpg', 35, 0.005), // Júpiter
-    createPlanet(2.5, 'assets/textures/saturn.jpg', 45, 0.003, [ // Saturno
+    createPlanet(2.5, 'assets/textures/saturn.jpg', 50, 0.003, [ // Saturno
         { size: 0.8, distance: 3, speed: 0.01 }
     ]),
-    createPlanet(2, 'assets/textures/uranus.jpg', 55, 0.002), // Urano
-    createPlanet(1.8, 'assets/textures/nepturne.jpg', 65, 0.0015)  // Netuno
+    createPlanet(2, 'assets/textures/uranus.jpg', 65, 0.002), // Urano
+    createPlanet(1.8, 'assets/textures/nepturne.jpg', 75, 0.0015)  // Netuno
 ];
 
 // Anéis de Saturno
-const ringGeometry = new THREE.RingGeometry(4, 5, 64);
-const ringMaterial = new THREE.MeshStandardMaterial({
-    map: textureLoader.load('assets/textures/saturn_ring.png'),
-    side: THREE.DoubleSide,
-    transparent: true
-});
-const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-ring.rotation.x = Math.PI / 2; // Rotação para ficar paralelo ao plano XY
-planets[5].planet.add(ring);
+// Função para criar um anel com cor específica
+function createColoredRing(innerRadius, outerRadius, color) {
+    const ringGeometry = new THREE.RingGeometry(innerRadius, outerRadius, 64);
+    const ringMaterial = new THREE.MeshBasicMaterial({
+        color: color,
+        side: THREE.DoubleSide,
+        transparent: true, // Adicionando transparência
+        opacity: 0.8, // Definindo o nível de opacidade
+    });
+    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    ring.rotation.x = Math.PI / 2; // Rotação para ficar paralelo ao plano XY
+    return ring;
+}
+
+// Adicionando múltiplos anéis ao redor de Saturno
+const rings = [
+    createColoredRing(3.5, 4, 0x2E2A2A),  // Anel D (Preto com tom marrom escuro)
+createColoredRing(4, 4.5, 0x6E4B3A),  // Anel C (Marrom escuro)
+createColoredRing(4.5, 5, 0xA67C52),  // Anel B (Marrom médio)
+createColoredRing(5, 5.4, 0xD2B48C),  // Anel A (Bege / Marrom claro)
+createColoredRing(5.4, 5.8, 0x8B4513), // Anel F (Marrom escuro)
+createColoredRing(5.8, 6.2, 0x3E2723), // Anel G (Marrom muito escuro / quase preto)
+createColoredRing(6.2, 6.6, 0x1C1C1C), // Anel E (Preto)
+createColoredRing(6.6, 7, 0x4B2F2F),  // Anel extra 1 (Marrom escuro)
+createColoredRing(7, 7.4, 0x5D4037),  // Anel extra 2 (Marrom médio escuro)
+createColoredRing(7.4, 7.8, 0x3E2723), // Anel extra 3 (Marrom muito escuro / quase preto)
+
+];
+
+// Adicionando os anéis a Saturno
+rings.forEach((ring) => planets[5].planet.add(ring));
+
 
 // Controles de câmera
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -340,21 +421,83 @@ toggleMovementButton.addEventListener('click', () => {
     toggleMovementButton.textContent = isMoving ? 'Pause Movement' : 'Resume Movement';
 });
 
+createRandomParticles(scene, 1000, 100, 700);
+
+// Função para carregar e adicionar um modelo GLTF
+function adicionarObjetoGLTF(url, posicao, escala, rotacao = { x: 0, y: 0, z: 0 }) {
+    // Loader para arquivos GLTF
+    const loader = new GLTFLoader();
+
+    // Carregando o modelo GLTF
+    loader.load(
+        url,
+        (gltf) => {
+            const modelo = gltf.scene;
+
+            // Configurando posição
+            modelo.position.set(posicao.x, posicao.y, posicao.z);
+
+            // Configurando escala
+            modelo.scale.set(escala.x, escala.y, escala.z);
+
+            // Configurando rotação inicial
+            modelo.rotation.set(rotacao.x, rotacao.y, rotacao.z);
+
+            // Adicionando à cena
+            scene.add(modelo);
+
+            console.log("Modelo GLTF carregado com sucesso:", url);
+
+            // Função para animar o modelo
+            function animar() {
+                // Rotação contínua no eixo Y (ou outro eixo desejado)
+                modelo.rotation.x += 0.009;  // Ajuste o valor para controlar a velocidade da rotação
+                modelo.rotation.z += 0.009;
+                // Atualizando a cena
+                renderer.render(scene, camera);
+
+                // Requisitando o próximo frame da animação
+                requestAnimationFrame(animar);
+            }
+
+            // Iniciando a animação
+            animar();
+        },
+        (progress) => {
+            console.log(`Progresso do carregamento do modelo: ${(progress.loaded / progress.total) * 100}%`);
+        },
+        (error) => {
+            console.error("Erro ao carregar o modelo GLTF:", error);
+        }
+    );
+}
+
+// Exemplo de uso
+adicionarObjetoGLTF(
+    './blackhole.glb',   // Caminho do arquivo GLTF
+    { x: 0, y: 100, z: 250 },         // Posição
+    { x: 100, y: 100, z: 100 },     // Escala
+    { x: 2.5, y: 4.5, z: 2.5 }     // Rotação inicial (opcional)
+);
+
+
+
+
 // Loop de animação
 function animate() {
     requestAnimationFrame(animate);
 
     // Controle de movimento dos planetas
     if (isMoving) {
-        planets.forEach(({ planet, orbit, speed }) => {
+        planets.forEach(({ planet, orbit, speed, tail }) => {
             orbit.rotation.y += speed * speedMultiplier; // Translação
             planet.rotation.y += 0.02; // Rotação
+            tail.update();
         });
     }
 
     // Outros movimentos, se houver
     moveSolarSystem(); // Exemplo de movimento do sistema solar
-
     renderer.render(scene, camera);
 }
 
