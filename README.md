@@ -60,9 +60,13 @@ Você pode incluir o Three.js diretamente em seu projeto HTML através de um lin
 Se estiver usando um gerenciador de pacotes como o **npm** (para projetos estruturados com Node.js), instale o Three.js com o seguinte comando:
 
 ```bash
-npm install three
+npm install --save three
 ```
+Em seguida, instale também o Vite:
 
+```bash
+npm install --save-dev vite
+```
 Depois, importe o Three.js no seu código JavaScript:
 
 ```javascript
@@ -101,7 +105,11 @@ git clone https://github.com/prsousa8/solar_system_computer-graphics.git
 
 ### Execução
 
-Utilize a extensão Live Server do VS Code para rodar o projeto localmente.
+Utilize a extensão Live Server do VS Code para rodar o projeto localmente caso tenha baixado as bibliotecas diretamente do site ThreeJs. Mas caso tenha instalado o Vite, execute o seguinte comando no terminal:
+
+```bash
+npx vite
+```
 
 ## Colaboradores
 
