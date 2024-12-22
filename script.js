@@ -150,7 +150,7 @@ createRandomParticles(scene, 1000, 100, 700);
 
 // BURACO NEGRO
 
-let modeloAnimado = null; // Variável para armazenar o modelo animado
+let modeloAnimado = []; // Variável para armazenar o modelo animado
 
 // Carregar o objeto GLTF
 adicionarObjetoGLTF(
@@ -160,7 +160,7 @@ adicionarObjetoGLTF(
     { x: 100, y: 100, z: 100 },  // Escala
     { x: 2.5, y: 4.5, z: 2.5 }   // Rotação inicial (opcional)
 ).then((modelo) => {
-    modeloAnimado = modelo; // Armazena o modelo para animação
+    modeloAnimado.push(modelo); // Armazena o modelo para animação
 }).catch((error) => {
     console.error("Erro ao carregar o modelo:", error);
 });
@@ -200,10 +200,10 @@ function animate() {
     animateParticles();
     animateParticleBeam(100);
     // Animação do modelo (se carregado)
-    if (modeloAnimado) {
-        modeloAnimado.rotation.x += 0.009;
-        modeloAnimado.rotation.z += 0.009;
-    }
+    modeloAnimado.forEach((objeto)=>{
+        objeto.rotation.x += 0.009;
+        objeto.rotation.z += 0.009;
+    })
     renderer.render(scene, camera);
 }
 
