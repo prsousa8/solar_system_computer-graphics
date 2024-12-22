@@ -155,7 +155,7 @@ let modeloAnimado = null; // Variável para armazenar o modelo animado
 // Carregar o objeto GLTF
 adicionarObjetoGLTF(
     scene,
-    './blackhole.glb',  // Caminho do modelo
+    './assets/objects/blackhole.glb',  // Caminho do modelo
     { x: 0, y: 100, z: 500 },  // Posição
     { x: 100, y: 100, z: 100 },  // Escala
     { x: 2.5, y: 4.5, z: 2.5 }   // Rotação inicial (opcional)
@@ -164,6 +164,7 @@ adicionarObjetoGLTF(
 }).catch((error) => {
     console.error("Erro ao carregar o modelo:", error);
 });
+
 
 // Esfera de particulas
 
