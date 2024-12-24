@@ -3,7 +3,7 @@ import * as THREE from '../libraries/three.module.js';
 // Variáveis de controle do movimento do sistema solar
 let isSystemMoving = false; // Inicialmente parado
 let systemDirection = 1; // Define direção inicial (1 = direita, -1 = esquerda)
-export const moveSystemButton = document.getElementById('moveSystem');
+const moveSystemButton = document.getElementById('moveSystem');
 
 // Criação do grupo para o sistema solar (agrupa planetas e o sol)
 export const solarSystem = new THREE.Group();

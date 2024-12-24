@@ -4,35 +4,6 @@ import * as THREE from '../libraries/three.module.js';
 let constellations = [];
 let constellationLines = [];
 
-// Função para criar constelações
-export function createConstellations(scene) {
-    const starMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-
-    // Exemplo de constelações mais distantes
-    const starPositions1 = [
-        new THREE.Vector3(10, 5, 20),
-        new THREE.Vector3(15, 10, 25),
-        new THREE.Vector3(20, 15, 30)
-    ];
-
-    const starPositions2 = [
-        new THREE.Vector3(-10, -15, 20),
-        new THREE.Vector3(-15, -10, 25),
-        new THREE.Vector3(-20, -5, 30)
-    ];
-
-    // Adicionando as estrelas
-    const stars1 = createStarsFromPositions(starPositions1, scene);
-    const stars2 = createStarsFromPositions(starPositions2, scene);
-
-    // Adicionando linhas para representar as constelações
-    addLinesForConstellation(starPositions1, scene);
-    addLinesForConstellation(starPositions2, scene);
-
-    // Armazenar estrelas e linhas
-    constellations.push(...stars1, ...stars2);
-}
-
 // Função para criar estrelas a partir de posições
 function createStarsFromPositions(positions, scene) {
     const stars = [];
@@ -57,6 +28,33 @@ function addLinesForConstellation(positions, scene) {
         scene.add(line);
         constellationLines.push(line);
     }
+}
+
+// Função para criar constelações
+export function createConstellations(scene) {
+    // Exemplo de constelações mais distantes
+    const starPositions1 = [
+        new THREE.Vector3(10, 5, 20),
+        new THREE.Vector3(15, 10, 25),
+        new THREE.Vector3(20, 15, 30)
+    ];
+
+    const starPositions2 = [
+        new THREE.Vector3(-10, -15, 20),
+        new THREE.Vector3(-15, -10, 25),
+        new THREE.Vector3(-20, -5, 30)
+    ];
+
+    // Adicionando as estrelas
+    const stars1 = createStarsFromPositions(starPositions1, scene);
+    const stars2 = createStarsFromPositions(starPositions2, scene);
+
+    // Adicionando linhas para representar as constelações
+    addLinesForConstellation(starPositions1, scene);
+    addLinesForConstellation(starPositions2, scene);
+
+    // Armazenar estrelas e linhas
+    constellations.push(...stars1, ...stars2);
 }
 
 // Função para alternar a visibilidade das constelações e suas linhas

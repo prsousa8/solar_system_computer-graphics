@@ -48,17 +48,14 @@ export function createTail(scene, planet, color, trailLength) {
     };
 }
 
-// Modularização da função createPlanet
-export function createPlanet(scene, textureLoader, size, texturePath, distance, speed, satellites = [], radius, color) {
-    const orbitGroup = new THREE.Group(); // Grupo para a órbita
-    scene.add(orbitGroup);
+// Função createPlanet
+export function createPlanet(scene, textureLoader, size, texturePath, distance, speed, satellites = [], color) {
 
     const planetGeometry = new THREE.SphereGeometry(size, 32, 32);
     const planetMaterial = new THREE.MeshStandardMaterial({
         map: textureLoader.load(texturePath)
     });
     const planet = new THREE.Mesh(planetGeometry, planetMaterial);
-    orbitGroup.add(planet);
 
     const orbit = new THREE.Object3D();
     orbit.add(planet);
@@ -67,7 +64,7 @@ export function createPlanet(scene, textureLoader, size, texturePath, distance, 
     planet.position.x = distance; // Define a posição inicial na órbita
 
     // Adiciona satélites, se houver
-    satellites.forEach(({ size, distance, speed }) => {
+    satellites.forEach(({ size, distance}) => {
         const satelliteGeometry = new THREE.SphereGeometry(size, 16, 16);
         const satelliteMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
         const satellite = new THREE.Mesh(satelliteGeometry, satelliteMaterial);
@@ -77,7 +74,6 @@ export function createPlanet(scene, textureLoader, size, texturePath, distance, 
         planet.add(satelliteOrbit);
 
         satellite.position.x = distance;
-        satelliteOrbit.userData = { speed, angle: 0 };
     });
 
     const tail = createTail(scene, planet, color, 200);

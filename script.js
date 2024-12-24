@@ -22,14 +22,14 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Gerenciador de Texturas
-const textureLoader = new THREE.TextureLoader();
-
 
 // Controles de câmera
 const controls = new OrbitControls(camera, renderer.domElement);
 camera.position.z = 100;
 controls.update();
+
+// Gerenciador de Texturas
+const textureLoader = new THREE.TextureLoader();
 
 // Fundo da Cena
 const spaceTexture1 = new THREE.TextureLoader().load('assets/textures/stars.jpg');
@@ -67,42 +67,48 @@ const planets = [
 // Anéis de Saturno
 createSaturnRings(planets[5].planet);
 
-
-// Estados
-let speedMultiplier = 1;
-
-// Evento para interação do usuário
-window.addEventListener('keydown', (event) => {
-    switch (event.key) {
-        case 'p': // Aumentar velocidade global
-            speedMultiplier *= 1.1;
-            break;
-        case 'm': // Diminuir velocidade global
-            speedMultiplier /= 1.1;
-            break;
-        case 'w': // Aproxima a câmera (zoom in)
-            camera.position.z -= 5;
-            break;
-        case 's': // Afasta a câmera (zoom out)
-            camera.position.z += 5;
-            break;
-        case 'a': // Move a câmera para a esquerda
-            camera.position.x -= 5;
-            break;
-        case 'd': // Move a câmera para a direita
-            camera.position.x += 5;
-            break;
-    }
-});
-
-// Função para dar zoom em um planeta
-setupKeyboardInteractions(planets, camera, controls);
-
 // Cria asteroides
 createAsteroids(scene);
 
 // Cria constelações
 createConstellations(scene);
+
+// ESTRELAS
+createRandomParticles(scene, 1000, 100, 700);
+
+// BURACO NEGRO
+
+let modeloAnimado = []; // Variável para armazenar o modelo animado
+
+// Carregar o objeto GLTF
+adicionarObjetoGLTF(
+    scene,
+    './assets/objects/blackhole.glb',  // Caminho do modelo
+    { x: 0, y: 100, z: 500 },  // Posição
+    { x: 100, y: 100, z: 100 },  // Escala
+    { x: 2.5, y: 4.5, z: 2.5 }   // Rotação inicial (opcional)
+).then((modelo) => {
+    modeloAnimado.push(modelo); // Armazena o modelo para animação
+}).catch((error) => {
+    console.error("Erro ao carregar o modelo:", error);
+});
+
+
+// Esfera de particulas
+
+// Configuração do evento de teclado
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'j') {
+        createDynamicParticleSphere(scene, 100, 0xffff00, 20000);
+    }
+    if (event.key === 'c') {
+        createParticleBeam(scene, new THREE.Vector3(300, 0, 0), new THREE.Vector3(-1, 0, 0), 0xff0000, 10000, 500, 300);
+    }
+    if (event.key === 'r') {
+        resetParticleSphere(scene);
+        resetParticleBeam(scene);
+    }
+});
 
 // GRID
 const size = 200;
@@ -144,43 +150,36 @@ toggleMovementButton.addEventListener('click', () => {
     toggleMovementButton.textContent = isMoving ? 'Pause Movement' : 'Resume Movement';
 });
 
-// ESTRELAS
 
-createRandomParticles(scene, 1000, 100, 700);
+// Estados
+let speedMultiplier = 1;
 
-// BURACO NEGRO
-
-let modeloAnimado = []; // Variável para armazenar o modelo animado
-
-// Carregar o objeto GLTF
-adicionarObjetoGLTF(
-    scene,
-    './assets/objects/blackhole.glb',  // Caminho do modelo
-    { x: 0, y: 100, z: 500 },  // Posição
-    { x: 100, y: 100, z: 100 },  // Escala
-    { x: 2.5, y: 4.5, z: 2.5 }   // Rotação inicial (opcional)
-).then((modelo) => {
-    modeloAnimado.push(modelo); // Armazena o modelo para animação
-}).catch((error) => {
-    console.error("Erro ao carregar o modelo:", error);
-});
-
-
-// Esfera de particulas
-
-// Configuração do evento de teclado
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'j') {
-        createDynamicParticleSphere(scene, 100, 0xffff00, 20000);
-    }
-    if (event.key === 'c') {
-        createParticleBeam(scene, new THREE.Vector3(300, 0, 0), new THREE.Vector3(-1, 0, 0), 0xff0000, 10000, 500, 300);
-    }
-    if (event.key === 'r') {
-        resetParticleSphere(scene);
-        resetParticleBeam(scene);
+// Evento para interação do usuário
+window.addEventListener('keydown', (event) => {
+    switch (event.key) {
+        case 'p': // Aumentar velocidade global
+            speedMultiplier *= 1.1;
+            break;
+        case 'm': // Diminuir velocidade global
+            speedMultiplier /= 1.1;
+            break;
+        case 'w': // Aproxima a câmera (zoom in)
+            camera.position.z -= 5;
+            break;
+        case 's': // Afasta a câmera (zoom out)
+            camera.position.z += 5;
+            break;
+        case 'a': // Move a câmera para a esquerda
+            camera.position.x -= 5;
+            break;
+        case 'd': // Move a câmera para a direita
+            camera.position.x += 5;
+            break;
     }
 });
+
+// Função para dar zoom em um planeta
+setupKeyboardInteractions(planets, camera, controls);
 
 // Loop de animação
 function animate() {

@@ -9,7 +9,6 @@ export function createDepressedGrid(size = 200, divisions = 50, depthFactor = 50
         const distance = Math.sqrt(vertex.x ** 2 + vertex.y ** 2); // Distância do centro
         vertex.z = -Math.exp(-distance / 50) * depthFactor; // Função exponencial para suavidade
     });
-    planeGeometry.computeVertexNormals(); // Recalcula normais para iluminação correta
 
     // Criação do material para a grade
     const wireframeMaterial = new THREE.MeshBasicMaterial({
