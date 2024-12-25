@@ -56,7 +56,7 @@ Você pode incluir o Three.js diretamente em seu projeto HTML através de um lin
 ```
 
 
-#### 2. **Instalar via npm**
+#### 2. **Instalar via npm (Método utilizado nesse projeto)**
 Se estiver usando um gerenciador de pacotes como o **npm** (para projetos estruturados com Node.js), instale o Three.js com o seguinte comando:
 
 ```bash
