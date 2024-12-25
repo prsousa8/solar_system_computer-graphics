@@ -5,10 +5,6 @@
 <p align="justify">Este projeto consiste no desenvolvimento de uma simulação interativa do Sistema Solar utilizando técnicas de computação gráfica. O objetivo é criar uma representação visualmente realista dos planetas, luas, e do Sol, permitindo a visualização de suas órbitas, tamanhos relativos e movimentos.</p>
 
 
-## Site Sistema Solar 🤩
-<p align="justify"> Neste link você irá acessar e interagir com o site</p>
-- Link: <a href='#'>Site Sistema Solar</a>
-
 ## Tecnologias e Ferramentas Utilizadas 🔧
 
 <div align="left">
@@ -26,6 +22,9 @@ Para criar um ambiente adequado de desenvolvimento Web, executamos os seguintes 
 
 Escolha um editor de código de sua preferência. Algumas opções populares incluem o Visual Studio Code, Sublime Text, Atom, entre outros. Você pode baixar e instalar o Visual Studio Code em https://code.visualstudio.com/.
 
+### Instalação do NodeJs
+
+Faça a instalação do NodeJs para funcionamento adequado do gerenciador Vite, que será abordado posteriormente. Acesse o site https://nodejs.org/
 
 ### Instalação da biblioteca ThreeJS
 
