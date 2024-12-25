@@ -5,6 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Docs</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0d1b2a;
+            color: #e0e1dd;
+            line-height: 1.6;
+        }
+
+        #documentation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            z-index: 10; /* Sobrepõe o canvas do Three.js */
+        }
+
+        header {
+            background-color: #1b263b;
+            color: #e0e1dd;
+            padding: 20px 10px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        main {
+            display: flex;
+            gap: 200px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 60px; /* Espaço para evitar sobreposição com o rodapé */
+            height: 1200px;
+            position: absolute;
+            top: 40px;
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        section h2 {
+            color: #f0a500;
+            font-size: 1.8rem;
+            border-bottom: 2px solid #f0a500;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            background-color: #1b263b;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            width: 500px;
+        }
+
+        ul li strong {
+            color: #f0a500;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #1b263b;
+            color: #e0e1dd;
+            position: relative; /* Altera posição fixa para relativa */
+            width: 100%;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -13,5 +100,33 @@
             <a href="docs.html">Docs</a>
         </nav>
     </header>
+
+    <main>
+        <section class="shortcuts">
+            <h2>Atalhos do Teclado</h2>
+            <ul>
+                <li><strong>Tecla W:</strong> Aproxima a câmera (zoom in).</li>
+                <li><strong>Tecla S:</strong> Afasta a câmera (zoom out).</li>
+                <li><strong>Tecla A:</strong> Move a câmera para a esquerda.</li>
+                <li><strong>Tecla D:</strong> Move a câmera para a direita.</li>
+                <li><strong>Tecla P:</strong> Aumenta a velocidade de translação.</li>
+                <li><strong>Tecla M:</strong> Diminui a velocidade de translação.</li>
+                <li><strong>Tecla J:</strong> Cria uma esfera dinâmica de partículas.</li>
+                <li><strong>Tecla C:</strong> Cria um feixe de partículas dinâmico.</li>
+                <li><strong>Tecla R:</strong> Reseta as partículas e o feixe de partículas.</li>
+            </ul>
+        </section>
+        <section class="buttons">
+            <h2>Botões</h2>
+            <ul>
+                <li><strong>Resume Movementtranslação</strong> Ativa ou pausa o movimento de rotação e translação dos planetas.</li>
+                <li><strong>Orbits:</strong> Mostra ou oculta as órbitas dos planetas.</li>
+                <li><strong>Move System:</strong> Move o sistema solar no espaço.</li>
+                <li><strong>Background:</strong> Alterna entre diferentes texturas de fundo do espaço.</li>
+                <li><strong>Grid:</strong> Mostra ou oculta o grid tridimensional.</li>
+                <li><strong>Asteroids and Constellations:</strong> Ativa ou desativa a exibição de asteroides e constelações.</li>
+            </ul>
+        </section>
+    </main>
 </body>
 </html>
