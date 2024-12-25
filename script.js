@@ -102,7 +102,7 @@ document.addEventListener('keydown', (event) => {
         createDynamicParticleSphere(scene, 100, 0xffff00, 20000);
     }
     if (event.key === 'c') {
-        createParticleBeam(scene, new THREE.Vector3(300, 0, 0), new THREE.Vector3(-1, 0, 0), 0xff0000, 10000, 500, 300);
+        createParticleBeam(scene, new THREE.Vector3(300, 0, 0), new THREE.Vector3(-1, 0, 0), 0xffffff, 1000000, 500, 300);
     }
     if (event.key === 'r') {
         resetParticleSphere(scene);
