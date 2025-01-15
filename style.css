@@ -1,43 +1,47 @@
-body,html{
+body, html {
     margin: 0;
     padding: 0;
     overflow: hidden;
 }
 
-header{
+header {
     position: absolute;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between; 
     align-items: center;
     padding: 20px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 20px;
-    gap: 300px;
-    background-color: gainsboro;
+    background-color: #1b263b;
 }
 
-nav{
+nav {
     display: flex;
     gap: 20px;
+    justify-content: center;
+    flex-grow: 1; 
+    font-size: 18px;
+    
 }
 
-header button{
+header button {
     padding: 10px;
     font-size: 16px;
     background-color: #00f;
     color: white;
     border: none;
     cursor: pointer;
-    left: 20px;
 }
 
 #audioToggle {
     width: 40px;
     height: 40px;
     background-color: transparent;
-    background-image: url('assets/icons/volume_off.svg'); /* Ícone inicial */
+    background-image: url('assets/icons/volume_off.svg'); 
     background-size: cover;
+    margin-left: auto; 
+    margin-right: 30px;
 }
 
 #moveSystem {
@@ -52,7 +56,7 @@ header button{
     border: none;
 }
 
-#resetButton{
+#resetButton {
     position: absolute;
     bottom: 10px;
     right: 20px;
@@ -64,7 +68,7 @@ header button{
     border: none;
 }
 
-#toggleMovement{
+#toggleMovement {
     position: absolute;
     bottom: 10px;
     right: 40%;
@@ -76,9 +80,68 @@ header button{
     border: none;
 }
 
-
-
-a{
+a {
     text-decoration: none;
-    color: #00f;
+    color: white;
+}
+
+/* Estilo para o Menu Lateral e Hamburger */
+#hamburgerMenu {
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+#hamburgerMenu .bar {
+    display: block;
+    width: 30px;
+    height: 5px;
+    background-color: white;
+    margin: 6px 0;
+}
+
+/* Menu Lateral */
+#menu {
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    padding-top: 60px;
+    padding-left: 20px;
+    transition: transform 0.3s ease;
+    z-index: 999;
+}
+
+/* Texto dentro do menu */
+#menu label {
+    color: white;
+    font-size: 18px;
+    margin: 25px 0;
+    margin-bottom: -12px;
+}
+
+/* Esconde o menu inicialmente */
+#menu.hidden {
+    transform: translateX(-100%);
+}
+
+/* Estilo do conteúdo da página */
+#content {
+    transition: background-color 0.3s ease;
+}
+
+/* Quando o menu está aberto, torna o conteúdo 100% transparente */
+#content.blur {
+    background-color: transparent;
+}
+
+/* Exibir ícone de menu em todas as telas */
+#hamburgerMenu {
+    display: block; /* Sempre exibir o menu hambúrguer */
 }

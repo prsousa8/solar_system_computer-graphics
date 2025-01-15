@@ -15,6 +15,15 @@ import { initializeSolarSystem, moveSolarSystem, setupMoveSystemButton} from './
 import { orbits, createOrbit, toggleOrbitsVisibility } from './js/orbits.js';
 import { createDepressedGrid } from './js/grid.js';
 
+const hamburgerMenu = document.getElementById('hamburgerMenu');
+const menu = document.getElementById('menu');
+
+hamburgerMenu.addEventListener('click', () => {
+    menu.classList.toggle('hidden'); 
+});
+
+
+
 // Configuração inicial: Cena, Câmera e Renderizador
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 3000);
@@ -224,4 +233,4 @@ toggleBackgroundButton.addEventListener('click', () => {
     } else {
         scene.background = spaceTexture1; // Volta para a primeira textura
     }
-});
+}); 
