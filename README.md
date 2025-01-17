@@ -2,7 +2,7 @@
   <h1> Simulação do Sistema Solar em Computação Gráfica</h1>
 </div>
 
-<p align="justify">Este projeto consiste no desenvolvimento de uma simulação interativa do Sistema Solar utilizando técnicas de computação gráfica. O objetivo é criar uma representação visualmente realista dos planetas, luas, e do Sol, permitindo a visualização de suas órbitas, tamanhos relativos e movimentos.</p>
+<p align="justify">Este projeto consiste no desenvolvimento de uma simulação interativa do Sistema Solar utilizando técnicas de computação gráfica. O objetivo é criar uma representação visualmente realista dos planetas, luas e do Sol, permitindo a visualização de suas órbitas, tamanhos relativos e movimentos.</p>
 
 
 ## Tecnologias e Ferramentas Utilizadas 🔧
@@ -15,7 +15,7 @@
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" height="30" alt="javascript logo"/>
   <img width="12" />
   
-Para criar um ambiente adequado de desenvolvimento Web, executamos os seguintes passos
+Para criar um ambiente adequado de desenvolvimento Web, executamos os seguintes passos:
 
 
 ### Editor de código
