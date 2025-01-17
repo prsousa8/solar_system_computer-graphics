@@ -46,14 +46,15 @@ header button {
 
 #moveSystem {
     position: absolute;
-    bottom: 10px;
-    left: 20px;
-    padding: 10px 20px;
+    bottom: 50px;
+    right: 20px;
+    padding: 5px 10px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #333;
+    background-color: green;
     color: #fff;
     border: none;
+    border-radius: 5%;
 }
 
 #resetButton {
@@ -70,14 +71,15 @@ header button {
 
 #toggleMovement {
     position: absolute;
-    bottom: 10px;
-    right: 40%;
-    padding: 10px 20px;
+    bottom: 20px;
+    right: 20px;
+    padding: 5px 10px;
     font-size: 16px;
     cursor: pointer;
     background-color: green;
     color: #fff;
     border: none;
+    border-radius: 5%;
 }
 
 a {
