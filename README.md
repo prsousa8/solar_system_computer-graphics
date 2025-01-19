@@ -38,7 +38,7 @@ Three.js é uma biblioteca JavaScript usada para criar e mostrar gráficos 3D an
 Para trabalhar com a biblioteca **Three.js**, é necessário instalar alguns pacotes ou incluir os arquivos necessários no seu projeto. A seguir, explico as opções para instalar e usar o Three.js em um projeto:
 
 
-#### 1. **Usar o CDN**
+### 1. **Usar o CDN**
 Você pode incluir o Three.js diretamente em seu projeto HTML através de um link CDN. Este é o método mais simples para quem quer começar rapidamente, sem gerenciar dependências:
 
 ```html
