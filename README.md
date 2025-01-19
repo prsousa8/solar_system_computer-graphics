@@ -7,7 +7,7 @@
 ## Vídeo do Projeto
 
 Link do vídeo mostrando o projeto em funcionamento <br>
-<a href="https://www.youtube.com/watch?v=ocT24-XLqZc" target="blank"> Clique aqui!</a>
+<a href="https://www.youtube.com/watch?v=ocT24-XLqZc" target="_blank"> Clique aqui!</a>
 
 ## Tecnologias e Ferramentas Utilizadas 🔧
 
