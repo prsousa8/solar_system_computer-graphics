@@ -4,6 +4,10 @@
 
 <p align="justify">Este projeto consiste no desenvolvimento de uma simulação interativa do Sistema Solar utilizando técnicas de computação gráfica. O objetivo é criar uma representação visualmente realista dos planetas, luas e do Sol, permitindo a visualização de suas órbitas, tamanhos relativos e movimentos.</p>
 
+## Vídeo do Projeto
+
+Link do vídeo mostrando o projeto em funcionamento <br>
+<a href="https://www.youtube.com/watch?v=ocT24-XLqZc" target="blank"> Clique aqui!</a>
 
 ## Tecnologias e Ferramentas Utilizadas 🔧
 
