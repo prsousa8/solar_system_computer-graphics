@@ -15,6 +15,10 @@
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" height="30" alt="javascript logo"/>
   <img width="12" />
   
+## Créditos
+
+- **Texturas Planetárias:** As texturas dos planetas e outros corpos celestes foram fornecidas por [Solar System Scope Textures](https://www.solarsystemscope.com/textures/). Acesse o site para explorar mais recursos gratuitos.
+
 Para criar um ambiente adequado de desenvolvimento Web, executamos os seguintes passos:
 
 
